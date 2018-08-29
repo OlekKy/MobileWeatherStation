@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Mobile Weather Station</string>
+
+    <string name="welcome_mess_en">Welcome</string>
+    <string name="get_sensors_data_bt_en">Get data from sensors</string>
+    <string name="get_graphs_bt_en">Graphs</string>
+    <string name="get_info_bt_en">Information</string>
+    <string name="exit_bt_en">Exit</string>
+    <string name="all_sensors_bt_en">Get data from all sensors</string>
+    <string name="thermometer_bt_en">Get temperature</string>
+    <string name="barometer_bt_en">Get air pressure</string>
+    <string name="hygrometer_bt_en">Get humidity</string>
+
+    <string name="welcome_mess_pl">Witaj</string>
+    <string name="get_sensors_data_bt_pl">Odczyt z czujników</string>
+    <string name="get_graphs_bt_pl">Wykresy</string>
+    <string name="get_info_bt_pl">Informacje</string>
+    <string name="exit_bt_pl">Wyjśćie</string>
+    <string name="all_sensors_bt_pl">Pomiar z wszystkich czujników</string>
+    <string name="thermometer_bt_pl">Pomiar temperatury</string>
+    <string name="barometer_bt_pl">Pomiar ciśnienia</string>
+    <string name="hygrometer_bt_pl">Pomiar wilgotności</string>
+
+    <string name="sensor_value_1">00</string>
+    <string name="sensor_value_2">00</string>
+    <string name="sensor_value_3">00</string>
+
+    <string name="previousDate">&#60;</string>
+    <string name="nextDate">&#62;</string>
+
+</resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textTab1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_get_temp"
+        android:layout_centerHorizontal="true"
+        android:text="00"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/btn_get_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="28dp"
+        android:text="Pomiar" />
+
+    <com.akempa.mobileweatherstation.Thermometer
+        android:id="@+id/thermometer"
+        android:layout_width="293dp"
+        android:layout_height="331dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        app:innerColor="@color/innerColor"
+        app:middleColor="@color/middleColor"
+        app:outerColor="@color/outerColor"
+        app:radius="60dp" />
+</RelativeLayout>
