@@ -99,11 +99,12 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
         startWeek = dateFormat.format(getWeekStartDate());
         endWeek = dateFormat.format(getWeekEndDate());
         actualDate.setText(startWeek + " " + endWeek);
-        setGraphs(actualDay,actualDay, measurementType);
+        setGraphs( measurementType);
         previousDay = (Button) view.findViewById(R.id.btnPrevious);
         previousDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                c.add(Calendar.DATE, -7);
                 startDate.add(Calendar.DATE, -7);
                 endDate.add(Calendar.DATE, -7);
                 startWeek = dateFormat.format(startDate.getTime());
@@ -113,7 +114,7 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
                 actualDay = startDate.getTime().getDate();
 
                 actualDate.setText(startWeek + " " + endWeek);
-                setGraphs(actualDay,actualDay, measurementType);
+                setGraphs(measurementType);
             }
         });
 
@@ -122,6 +123,7 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
             @Override
             public void onClick(View view) {
                 // TODO change to week
+                c.add(Calendar.DATE, 7);
                 startDate.add(Calendar.DATE, 7);
                 endDate.add(Calendar.DATE, 7);
                 startWeek = dateFormat.format(startDate.getTime());
@@ -131,7 +133,7 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
                 actualDay = startDate.getTime().getDate();
 
                 actualDate.setText(startWeek + " " + endWeek);
-                setGraphs(actualDay,actualDay, measurementType);
+                setGraphs( measurementType);
             }
         });
 
@@ -139,11 +141,9 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setGraphs(actualDay,actualDay, measurementType);
+                setGraphs( measurementType);
             }
         });
-
-
 
         return view;
     }
@@ -154,7 +154,7 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
             calendar.add(Calendar.DATE, -1);
         }
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0,0);
-        //calendar.se
+
         return calendar.getTime();
     }
 
@@ -168,7 +168,7 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
         return calendar.getTime();
     }
 
-    public void setGraphs(final int startDay, final int endDay, final String type){
+    public void setGraphs(final String type){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -183,7 +183,7 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
                         chart.clear();
                     }
                 });
-                int beginningDay = startDay;
+                int beginningDay = actualDay;
 
                 for (int i = 0 ; i < 7 ; i++){
                     float average = 0;
@@ -209,6 +209,8 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
                         //float average = 0;
                         if (type.equals("Temperatura")) {
                             average = getAverageTemperature(fromm, too);
+                            //average = getAverageTemperature(i);
+
                         }
                         if (type.equals("Ciśnienie")) {
                             average = getAverageAirPressure(fromm, too);
@@ -221,8 +223,6 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
                     entries.add(new BarEntry(i, average));
                     beginningDay++;
                 }
-
-
 
                 dataSet = new BarDataSet(entries, "Projects");
                 data = new BarData(dataSet);
@@ -244,9 +244,79 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isResumed()) {
             System.out.println("REFRESHED !  !");
-            setGraphs(actualDay,actualDay, measurementType);
+            setGraphs(measurementType);
             // transactFragment(this,true);
         }
+    }
+    private float getAverageTemperature(int dayOfWeek){
+        float averageTemperature = 0;
+        float sumOfAllValues = 0;
+        List<Temperatures> tpList = null;
+        temperaturesDatabase.beginTransaction();
+        try {
+            Date fromm = getBeginningOfDay(dayOfWeek);
+            Date too = getEndingOfDay(dayOfWeek);
+            System.out.println("SK: "+fromm);
+            System.out.println("SK: "+too);
+            System.out.println("Calendar: "+c.getTime());
+
+            tpList = temperaturesDatabase.daoAccess()
+                    .fetchTemperaturesBetweenDate(fromm, too);
+            temperaturesDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            System.out.println("Exception Exception Exception Database");
+        } finally {
+            temperaturesDatabase.endTransaction();
+        }
+        int size = tpList.size();
+        if (size > 0){
+            for (int j = 0; j < size; j++){
+                String valuesString = tpList.get(j).getTemperatureValue();
+                float tempValue = Float.parseFloat(valuesString);
+                sumOfAllValues = sumOfAllValues + tempValue;
+            }
+            averageTemperature = sumOfAllValues/size;
+        }
+        return averageTemperature;
+    }
+    private Calendar getFirstDayOfWeek(){
+        Calendar cTemp = Calendar.getInstance(Locale.FRANCE);
+
+        cTemp.setTime(c.getTime());
+        System.out.println(c);
+        System.out.println(cTemp);
+
+        while (cTemp.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+            System.out.println("szukamy poniedzialku (tesknimy za praca)"+cTemp);
+            cTemp.add(Calendar.DATE, -1);
+        }
+        System.out.println("ZNALEZIONO : "+cTemp);
+        return cTemp;
+    }
+
+    private Date getBeginningOfDay(int dayOfWeek) {
+
+        Calendar cTemp = getFirstDayOfWeek();
+        cTemp.add(Calendar.DATE,dayOfWeek);
+        Date result = c.getTime();
+        result.setDate(getWeekStartDate().getDate());
+        result.setHours(0);
+        result.setMinutes(0);
+        result.setSeconds(0);
+        return result;
+    }
+
+    private Date getEndingOfDay(int dayOfWeek) {
+        Calendar cTemp = getFirstDayOfWeek();
+        cTemp.add(Calendar.DATE,dayOfWeek);
+        //c.add(Calendar.DATE,dayOfWeek);
+        Date result = c.getTime();
+        result.setDate(getWeekStartDate().getDate());
+        result.setDate(dayOfWeek);
+        result.setHours(23);
+        result.setMinutes(59);
+        result.setSeconds(59);
+        return result;
     }
 
     private float getAverageTemperature(Date fromm, Date too){
@@ -255,6 +325,8 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
         List<Temperatures> tpList = null;
         temperaturesDatabase.beginTransaction();
         try {
+//            System.out.println("AK: "+fromm);
+//            System.out.println("AK: "+too);
             tpList = temperaturesDatabase.daoAccess()
                     .fetchTemperaturesBetweenDate(fromm, too);
             temperaturesDatabase.setTransactionSuccessful();

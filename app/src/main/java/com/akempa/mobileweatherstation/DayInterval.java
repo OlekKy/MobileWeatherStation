@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DayInterval extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -41,8 +42,9 @@ public class DayInterval extends Fragment implements AdapterView.OnItemSelectedL
     private String measurementType;
     private DateFormat dateFormat;
     private Calendar c;
+    private Date dateStarting;
+    private Date dateEnding;
 
-    int actualDay;
     String actualDateString;
     private BarChart chart;
     private BarData data;
@@ -55,7 +57,7 @@ public class DayInterval extends Fragment implements AdapterView.OnItemSelectedL
     private HumiditiesDatabase humiditiesDatabase;
 
     ArrayList<BarEntry> entries = new ArrayList<>();
-    ArrayList<String> labels = new ArrayList<String>();
+    ArrayList<String> labels = new ArrayList<>();
 
     @Nullable
     @Override
@@ -66,55 +68,72 @@ public class DayInterval extends Fragment implements AdapterView.OnItemSelectedL
         airPressuresDatabase = Room.databaseBuilder(getContext(), AirPressuresDatabase.class, AIR_PRESSURE_DATABASE).fallbackToDestructiveMigration().build();
         humiditiesDatabase = Room.databaseBuilder(getContext(), HumiditiesDatabase.class, HUMIDITY_DATABASE).fallbackToDestructiveMigration().build();
 
-        chart = (BarChart) view.findViewById(R.id.bar_chart);
+        chart = view.findViewById(R.id.bar_chart);
 
-        Spinner spin = (Spinner) view.findViewById(R.id.spinner);
+        Spinner spin = view.findViewById(R.id.spinner);
         spin.setOnItemSelectedListener(this);
         ArrayAdapter aa = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_item,choose);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(aa);
 
-        actualDate = (TextView) view.findViewById(R.id.actualDate);
+        actualDate = view.findViewById(R.id.actualDate);
 
         dateFormat = new SimpleDateFormat(DATE_FORMAT);
         c = Calendar.getInstance();
         c.setTime(new Date());
-        actualDay = c.getTime().getDate();
+
+        dateStarting = c.getTime();
+        dateStarting.setMinutes(0);
+        dateStarting.setSeconds(0);
+        dateEnding = c.getTime();
+        dateEnding.setMinutes(59);
+        dateEnding.setSeconds(59);
+
         actualDate.setText(dateFormat.format(c.getTime()));
 
-        previousDay = (Button) view.findViewById(R.id.btnPrevious);
+        previousDay = view.findViewById(R.id.btnPrevious);
         previousDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 c.add(Calendar.DATE, -1);
-                actualDay = c.getTime().getDate();
+               // subtractDays(c.getTime(), 1);
+                System.out.println(c.getTime().getDate());
+//
+//                System.out.println(dateStarting);
+//                System.out.println(dateEnding);
+                dateStarting.setDate(c.getTime().getDate());
+                dateEnding.setDate(c.getTime().getDate());
+//                System.out.println(dateStarting);
+//                System.out.println(dateEnding);
+                //Date ssDate  = c.getTime();
                 actualDateString = dateFormat.format(c.getTime());
                 actualDate.setText(actualDateString);
-                setGraphs(actualDay,actualDay, measurementType);
+                setGraphs(measurementType);
             }
         });
 
-        nextDay = (Button) view.findViewById(R.id.btnNext);
+        nextDay = view.findViewById(R.id.btnNext);
         nextDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 c.add(Calendar.DATE, 1);
-                actualDay = c.getTime().getDate();
+                dateStarting.setDate(c.getTime().getDate());
+                dateEnding.setDate(c.getTime().getDate());
                 actualDateString = dateFormat.format(c.getTime());
                 actualDate.setText(actualDateString);
-                setGraphs(actualDay,actualDay, measurementType);
+                setGraphs(measurementType);
             }
         });
 
-        btnUpdate = (Button) view.findViewById(R.id.btnUpdate);
+        btnUpdate = view.findViewById(R.id.btnUpdate);
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setGraphs(actualDay,actualDay, measurementType);
+                setGraphs(measurementType);
             }
         });
 
-        setGraphs(actualDay,actualDay, measurementType);
+        setGraphs(measurementType);
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {
@@ -204,7 +223,7 @@ public class DayInterval extends Fragment implements AdapterView.OnItemSelectedL
         return view;
     }
 
-    public void setGraphs(final int startDay, final int endDay, final String type){
+    public void setGraphs(final String type){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -222,32 +241,36 @@ public class DayInterval extends Fragment implements AdapterView.OnItemSelectedL
 
                 for (int i = 0 ; i < 24 ; i++){
 
-                    Date fromm = new Date();
+                    dateStarting.setHours(i);
 
-                    fromm.setDate(startDay);
-                    fromm.setHours(i);
-                    fromm.setMonth(8-1);
-                    fromm.setMinutes(0);
-                    fromm.setSeconds(0);
-                    fromm.setYear(2018-1900);
-                    Date too = new Date();
-
-                    too.setDate(endDay);
-                    too.setHours(i);
-                    too.setMonth(8-1);
-                    too.setMinutes(59);
-                    too.setSeconds(59);
-                    too.setYear(2018-1900);
+                    dateEnding.setHours(i);
+//                    Date fromm = new Date();
+//
+//                    fromm.setDate(startDay);
+//                    fromm.setHours(i);
+//                    fromm.setMonth(8-1);
+//                    fromm.setMinutes(0);
+//                    fromm.setSeconds(0);
+//                    fromm.setYear(2018-1900);
+//                    Date too = new Date();
+//
+//                    too.setDate(endDay);
+//                    too.setHours(i);
+//                    too.setMonth(8-1);
+//                    too.setMinutes(59);
+//                    too.setSeconds(59);
+//                    too.setYear(2018-1900);
 
                     float average = 0;
                     if (type.equals("Temperatura")) {
-                        average = getAverageTemperature(fromm, too);
+                        average = getAverageTemperature(dateStarting, dateEnding);
+                        average = getAverageTemperature(i);
                     }
                     if (type.equals("Ciśnienie")) {
-                        average = getAverageAirPressure(fromm, too);
+                        average = getAverageAirPressure(dateStarting, dateEnding);
                     }
                     if (type.equals("Wilgotność")){
-                        average = getAverageHumidity(fromm, too);
+                        average = getAverageHumidity(dateStarting, dateEnding);
                     }
 
 //                    temperaturesList = temperaturesDatabase.daoAccess()
@@ -289,15 +312,56 @@ public class DayInterval extends Fragment implements AdapterView.OnItemSelectedL
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser && isResumed()) {
             System.out.println("REFRESHED !  !");
-            setGraphs(actualDay,actualDay, measurementType);
+            setGraphs(measurementType);
            // transactFragment(this,true);
         }
+    }
+
+    private float getAverageTemperature(int i){
+        float averageTemperature = 0;
+        float sumOfAllValues = 0;
+        List<Temperatures> tpList = null;
+        temperaturesDatabase.beginTransaction();
+        try {
+            Date dataStart = c.getTime();
+            dataStart.setHours(i);
+            dataStart.setMinutes(0);
+            dataStart.setSeconds(0);
+            Date dataEnd = c.getTime();
+            dataEnd.setHours(i);
+            dataEnd.setMinutes(59);
+            dataEnd.setSeconds(59);
+//            System.out.println("SK: "+dataStart);
+//            System.out.println("SK: "+dataEnd);
+            tpList = temperaturesDatabase.daoAccess()
+                    .fetchTemperaturesBetweenDate(dataStart, dataEnd);
+            temperaturesDatabase.setTransactionSuccessful();
+        } catch (Exception e) {
+            System.out.println("Exception Exception Exception Database");
+        } finally {
+            temperaturesDatabase.endTransaction();
+        }
+
+        int size = tpList.size();
+        if (size > 0){
+            for (int j = 0; j < size; j++){
+                String valuesString = tpList.get(j).getTemperatureValue();
+                float tempValue = Float.parseFloat(valuesString);
+                sumOfAllValues = sumOfAllValues + tempValue;
+            }
+            averageTemperature = sumOfAllValues/size;
+        }
+        return averageTemperature;
     }
 
     private float getAverageTemperature(Date fromm, Date too){
         float averageTemperature = 0;
         float sumOfAllValues = 0;
         List<Temperatures> tpList = null;
+
+//        System.out.println("AK: "+fromm);
+//        System.out.println("AK: "+too);
+
         temperaturesDatabase.beginTransaction();
         try {
             tpList = temperaturesDatabase.daoAccess()
@@ -346,6 +410,20 @@ public class DayInterval extends Fragment implements AdapterView.OnItemSelectedL
             averageAirPressure = sumOfAllValues/size;
         }
         return averageAirPressure;
+    }
+
+    private Date addDays(Date date, int days){
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, days);
+        return cal.getTime();
+    }
+
+    private Date subtractDays(Date date, int days){
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, -days);
+        return cal.getTime();
     }
 
     private float getAverageHumidity(Date fromm, Date too){
