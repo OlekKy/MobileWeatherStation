@@ -20,12 +20,13 @@ import android.widget.TextView;
 import java.util.Date;
 import java.util.List;
 
+import de.nitri.gauge.Gauge;
+
 public class AirPressure  extends Fragment {
 
     private static final String DATABASE_NAME = "airpressure_db";
     private AirPressuresDatabase airPressuresDatabase;
     private List<AirPressures> airPressuresList;
-    // private Thermometer thermometer;
     private String value = "";
     private float v;
     private Button getAirPressureButton;
@@ -33,18 +34,19 @@ public class AirPressure  extends Fragment {
     private SensorManager sensorManager;
     private Sensor airPressureSensor;
     private boolean isLastRead;
+    private Gauge gauge1;
 
     private SensorEventListener sensorEventListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent sensorEvent) {
             float[] values = sensorEvent.values;
             textTab1.setText(String.format("%.3f hPa", values[0]));
+
             v = values[0];
+            gauge1.moveToValue(v);
             value = Float.toString(v);
             if (isLastRead){
-               // Toast.makeText(getActivity(), value, Toast.LENGTH_SHORT).show();
                 sensorManager.unregisterListener(sensorEventListener, airPressureSensor);
-                // insert to database
                 runDbInsertThread();
             }
         }
@@ -60,8 +62,10 @@ public class AirPressure  extends Fragment {
         View view = inflater.inflate(R.layout.air_pressure_fragment,container,false);
         airPressuresDatabase = Room.databaseBuilder(getContext(), AirPressuresDatabase.class, DATABASE_NAME).fallbackToDestructiveMigration().build();
 
-        textTab1 = (TextView) view.findViewById(R.id.textTab1);
-        getAirPressureButton = (Button) view.findViewById(R.id.btn_get_air_press);
+
+        gauge1 = view.findViewById(R.id.gauge);
+        textTab1 = view.findViewById(R.id.textTab1);
+        getAirPressureButton = view.findViewById(R.id.btn_get_air_press);
         getAirPressureButton.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("NewApi")
             @Override
@@ -106,4 +110,5 @@ public class AirPressure  extends Fragment {
             }
         }).start();
     }
+
 }

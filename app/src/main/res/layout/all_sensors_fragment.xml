@@ -5,22 +5,90 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/airPressureTextTab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="237dp"
+        android:layout_marginLeft="237dp"
+        android:layout_marginTop="152dp"
+        android:text="0"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/humidityTextTab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="235dp"
+        android:layout_marginLeft="235dp"
+        android:layout_marginTop="241dp"
+        android:text="0"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/tempTextTab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="235dp"
+        android:layout_marginLeft="235dp"
+        android:layout_marginTop="60dp"
+        android:text="0"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/textTab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="63dp"
+        android:layout_marginLeft="66dp"
+        android:layout_marginTop="62dp"
+        android:text="Temperatura"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/textTab3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="66dp"
+        android:layout_marginLeft="66dp"
+        android:layout_marginTop="151dp"
+        android:text="Cisnienie"
+        android:textSize="25sp" />
+
+    <TextView
         android:id="@+id/textTab1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="207dp"
-        android:text="Tab1"
+        android:layout_marginStart="62dp"
+        android:layout_marginLeft="66dp"
+        android:layout_marginTop="238dp"
+        android:text="Wilgotnosc"
         android:textSize="25sp" />
 
     <Button
-        android:id="@+id/btnTEST"
+        android:id="@+id/btn_get_all_sensors"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="156dp"
-        android:text="TESTBTN 1" />
+        android:layout_marginBottom="26dp"
+        android:text="Pomiar" />
 
 </RelativeLayout>

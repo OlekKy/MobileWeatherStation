@@ -21,12 +21,14 @@ import android.widget.Toast;
 import java.util.Date;
 import java.util.List;
 
+import de.nitri.gauge.Gauge;
+import pl.pawelkleczkowski.customgauge.CustomGauge;
+
 public class Humidity extends Fragment {
 
     private static final String DATABASE_NAME = "humidity_db";
     private HumiditiesDatabase humiditiesDatabase;
     private List<Humidities> humiditiesList;
-    // private Thermometer thermometer;
     private String value = "";
     private float v;
     private Button getHumidityButton;
@@ -34,6 +36,7 @@ public class Humidity extends Fragment {
     private SensorManager sensorManager;
     private Sensor humiditySensor;
     private boolean isLastRead;
+    private Gauge gauge1;
 
     private SensorEventListener sensorEventListener = new SensorEventListener() {
         @Override
@@ -41,11 +44,10 @@ public class Humidity extends Fragment {
             float[] values = sensorEvent.values;
             textTab1.setText(String.format("%.3f proc", values[0]));
             v = values[0];
+            gauge1.moveToValue(v);
             value = Float.toString(v);
             if (isLastRead){
-                Toast.makeText(getActivity(), value, Toast.LENGTH_SHORT).show();
                 sensorManager.unregisterListener(sensorEventListener, humiditySensor);
-                // insert to database
                 runDbInsertThread();
             }
         }
@@ -61,8 +63,10 @@ public class Humidity extends Fragment {
         View view = inflater.inflate(R.layout.humidity_fragment,container,false);
         humiditiesDatabase = Room.databaseBuilder(getContext(), HumiditiesDatabase.class, DATABASE_NAME).fallbackToDestructiveMigration().build();
 
-        textTab1 = (TextView) view.findViewById(R.id.textTab1);
-        getHumidityButton = (Button) view.findViewById(R.id.btn_get_humidity);
+        gauge1 = view.findViewById(R.id.gauge2);
+
+        textTab1 = view.findViewById(R.id.textTab1);
+        getHumidityButton = view.findViewById(R.id.btn_get_humidity);
         getHumidityButton.setOnTouchListener(new View.OnTouchListener() {
             @SuppressLint("NewApi")
             @Override
