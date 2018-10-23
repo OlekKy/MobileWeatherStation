@@ -81,7 +81,7 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(aa);
 
-        actualDate = (TextView) view.findViewById(R.id.actualDate);
+        actualDate = view.findViewById(R.id.actualDate);
         dateFormat = new SimpleDateFormat(DATE_FORMAT);
         c = Calendar.getInstance(Locale.FRANCE);
         c.setTime(new Date());

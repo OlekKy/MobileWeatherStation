@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class Temperature extends Fragment {
 
@@ -82,32 +83,6 @@ public class Temperature extends Fragment {
                     case MotionEvent.ACTION_UP:
                         isLastRead = true;
 
-                       // Toast.makeText(getActivity(), value, Toast.LENGTH_SHORT).show();
-                        //sensorManager.unregisterListener(sensorEventListener, temperatureSensor);
-
-                        // insert to database
-//                        new Thread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                //temperaturesDatabase.clearAllTables();
-//                                Temperatures temperatures = new Temperatures();
-//                                temperatures.setTemperatureValue(value);
-////                                String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-////                                temperatures.setTemperatureDate(mydate);
-//
-//                                Date date = new Date();
-//                                temperatures.setTemperatureTime(date);
-//
-//                                temperaturesDatabase.daoAccess().insertOnlySingleMovie(temperatures);
-//
-//                                temperaturesList = temperaturesDatabase.daoAccess().getAllTemperatures();
-//                                for (int i=0; i<temperaturesList.size(); i++){
-//                                    System.out.println(temperaturesList.get(i).getTemperatureTime()+" --- "+temperaturesList.get(i).getTemperatureId() +" : " +temperaturesList.get(i).getTemperatureValue() +" : " + temperaturesList.get(i).getTemperatureDate());
-//                                }
-//
-//                            }
-//                        }) .start();
-
                         break;
 
                 }
@@ -127,10 +102,71 @@ public class Temperature extends Fragment {
                 Date date = new Date();
                 temperatures.setTemperatureTime(date);
                 temperaturesDatabase.daoAccess().insertOnlySingleMovie(temperatures);
-                temperaturesList = temperaturesDatabase.daoAccess().getAllTemperatures();
-                for (int i=0; i<temperaturesList.size(); i++){
-                    System.out.println(temperaturesList.get(i).getTemperatureId() +" --- " +temperaturesList.get(i).getTemperatureValue() + " --- " + temperaturesList.get(i).getTemperatureTime());
-                    }
+                // prepared for august
+//                for (int i = 0; i < 15 ; i++){
+//                    Date date1 = new Date();
+//                    date1.setYear(2018-1900);
+//                    date1.setMonth(7);
+//                    date1.setDate(15+i);
+//                    date1.setMinutes(25);
+//                    for (int j = 0; j < 18; j++){
+//                        Temperatures preparedTemperature = new Temperatures();
+//                        Random r = new Random();
+//                        float low = 20f;
+//                        float high = 26f;
+//                        float fakeValue = low + r.nextFloat() * (high-low);
+//                        String sFakeValue = Float.toString(fakeValue);
+//                        preparedTemperature.setTemperatureValue(sFakeValue);
+//                        date1.setHours(5+j);
+//                        preparedTemperature.setTemperatureTime(date1);
+//                        temperaturesDatabase.daoAccess().insertOnlySingleMovie(preparedTemperature);
+//                    }
+//                }
+//                // prepared for september
+//                for (int i = 0; i < 29 ; i++){
+//                    Date date1 = new Date();
+//                    date1.setYear(2018-1900);
+//                    date1.setMonth(8);
+//                    date1.setDate(1+i);
+//                    date1.setMinutes(25);
+//                    for (int j = 0; j < 20; j++){
+//                        Temperatures preparedTemperature = new Temperatures();
+//                        Random r = new Random();
+//                        float low = 16f;
+//                        float high = 23f;
+//                        float fakeValue = low + r.nextFloat() * (high-low);
+//                        String sFakeValue = Float.toString(fakeValue);
+//                        preparedTemperature.setTemperatureValue(sFakeValue);
+//                        date1.setHours(5+j);
+//                        preparedTemperature.setTemperatureTime(date1);
+//                        temperaturesDatabase.daoAccess().insertOnlySingleMovie(preparedTemperature);
+//                    }
+//                }
+//                // prepared for october
+//                for (int i = 0; i < 22 ; i++){
+//                    Date date1 = new Date();
+//                    date1.setYear(2018-1900);
+//                    date1.setMonth(9);
+//                    date1.setDate(1+i);
+//                    date1.setMinutes(25);
+//                    for (int j = 0; j < 20; j++){
+//                        Temperatures preparedTemperature = new Temperatures();
+//                        Random r = new Random();
+//                        float low = 9f;
+//                        float high = 18f;
+//                        float fakeValue = low + r.nextFloat() * (high-low);
+//                        String sFakeValue = Float.toString(fakeValue);
+//                        preparedTemperature.setTemperatureValue(sFakeValue);
+//                        date1.setHours(5+j);
+//                        preparedTemperature.setTemperatureTime(date1);
+//                        temperaturesDatabase.daoAccess().insertOnlySingleMovie(preparedTemperature);
+//                    }
+//                }
+
+                //temperaturesList = temperaturesDatabase.daoAccess().getAllTemperatures();
+//                for (int i=0; i<temperaturesList.size(); i++){
+//                    System.out.println(temperaturesList.get(i).getTemperatureId() +" --- " +temperaturesList.get(i).getTemperatureValue() + " --- " + temperaturesList.get(i).getTemperatureTime());
+//                    }
             }
         }).start();
     }

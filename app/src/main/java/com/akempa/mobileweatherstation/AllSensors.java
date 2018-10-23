@@ -31,8 +31,6 @@ public class AllSensors extends Fragment {
     private Sensor humiditySensor;
 
     private boolean isLastRead;
-//    private SensorManager mSensorManager;
-//    private SensorEventListener mSensorListener;
 
     private SensorEventListener sensorEventListener = new SensorEventListener() {
         @Override
@@ -80,7 +78,6 @@ public class AllSensors extends Fragment {
                 airPressureSensor = sensorManagerTemperature.getDefaultSensor(Sensor.TYPE_PRESSURE);
                 humiditySensor = sensorManagerTemperature.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY);
 
-                Toast.makeText(getActivity(), "TESTING BUTTON CLICK 1",Toast.LENGTH_SHORT).show();
 
                 switch (motionEvent.getAction()){
 

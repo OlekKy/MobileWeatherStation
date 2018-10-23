@@ -19,7 +19,6 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
     private EditText txtDate, txtTime;
     private int mYear, mMonth, mDay, mHour, mMinute;
 
-    //private Button btnTEST;
 
     @Nullable
     @Override
