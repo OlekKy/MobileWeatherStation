@@ -38,10 +38,7 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
     private TextView actualDate;
     private String measurementType;
 
-    int actualYear;
-    int actualMonth;
     int actualDay;
-    String actualDateString;
 
     private DateFormat dateFormat;
     private Calendar c;
@@ -52,7 +49,7 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
     private BarData data;
     String[] choose = { "Temperatura", "Ciśnienie", "Wilgotność", "Wszystkie"};
 
-    private static final String DATABASE_NAME = "movies_db";
+    private static final String DATABASE_NAME = "temperature_db";
     private static final String AIR_PRESSURE_DATABASE = "airpressure_db";
     private static final String HUMIDITY_DATABASE = "humidity_db";
     String startWeek;
@@ -73,9 +70,9 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
         airPressuresDatabase = Room.databaseBuilder(getContext(), AirPressuresDatabase.class, AIR_PRESSURE_DATABASE).fallbackToDestructiveMigration().build();
 
         humiditiesDatabase = Room.databaseBuilder(getContext(), HumiditiesDatabase.class, HUMIDITY_DATABASE).fallbackToDestructiveMigration().build();
-        chart = (BarChart) view.findViewById(R.id.bar_chart);
+        chart = view.findViewById(R.id.bar_chart);
 
-        Spinner spin = (Spinner) view.findViewById(R.id.spinner);
+        Spinner spin = view.findViewById(R.id.spinner);
         spin.setOnItemSelectedListener(this);
         ArrayAdapter aa = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_item,choose);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -90,7 +87,6 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
         actualDay = c.getTime().getDate();
         actualDate.setText(dateFormat.format(c.getTime()));
 
-
         startDate = Calendar.getInstance(Locale.FRANCE);
         endDate = Calendar.getInstance(Locale.FRANCE);
         startDate.setTime(getWeekStartDate());
@@ -100,7 +96,7 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
         endWeek = dateFormat.format(getWeekEndDate());
         actualDate.setText(startWeek + " " + endWeek);
         setGraphs( measurementType);
-        previousDay = (Button) view.findViewById(R.id.btnPrevious);
+        previousDay = view.findViewById(R.id.btnPrevious);
         previousDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,7 +106,6 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
                 startWeek = dateFormat.format(startDate.getTime());
                 endWeek = dateFormat.format(endDate.getTime());
 
-                //actualDay = c.getTime().getDate();
                 actualDay = startDate.getTime().getDate();
 
                 actualDate.setText(startWeek + " " + endWeek);
@@ -118,26 +113,22 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
-        nextDay = (Button) view.findViewById(R.id.btnNext);
+        nextDay = view.findViewById(R.id.btnNext);
         nextDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO change to week
                 c.add(Calendar.DATE, 7);
                 startDate.add(Calendar.DATE, 7);
                 endDate.add(Calendar.DATE, 7);
                 startWeek = dateFormat.format(startDate.getTime());
                 endWeek = dateFormat.format(endDate.getTime());
-
-                //actualDay = c.getTime().getDate();
                 actualDay = startDate.getTime().getDate();
-
                 actualDate.setText(startWeek + " " + endWeek);
                 setGraphs( measurementType);
             }
         });
 
-        btnUpdate = (Button) view.findViewById(R.id.btnUpdate);
+        btnUpdate = view.findViewById(R.id.btnUpdate);
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -187,7 +178,6 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
 
                 for (int i = 0 ; i < 7 ; i++){
                     float average = 0;
-                   // for (int i = 0 ; i < 24 ; i++){
 
                         Date fromm = new Date();
 
@@ -206,11 +196,8 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
                         too.setSeconds(59);
                         too.setYear(2018-1900);
 
-                        //float average = 0;
                         if (type.equals("Temperatura")) {
                             average = getAverageTemperature(fromm, too);
-                            //average = getAverageTemperature(i);
-
                         }
                         if (type.equals("Ciśnienie")) {
                             average = getAverageAirPressure(fromm, too);
@@ -218,8 +205,7 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
                         if (type.equals("Wilgotność")){
                             average = getAverageHumidity(fromm, too);
                         }
-                        //entries.add(new BarEntry(i, average));
-                 //   }
+
                     entries.add(new BarEntry(i, average));
                     beginningDay++;
                 }
@@ -245,7 +231,6 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
         if (isVisibleToUser && isResumed()) {
             System.out.println("REFRESHED !  !");
             setGraphs(measurementType);
-            // transactFragment(this,true);
         }
     }
     private float getAverageTemperature(int dayOfWeek){
@@ -256,15 +241,11 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
         try {
             Date fromm = getBeginningOfDay(dayOfWeek);
             Date too = getEndingOfDay(dayOfWeek);
-            System.out.println("SK: "+fromm);
-            System.out.println("SK: "+too);
-            System.out.println("Calendar: "+c.getTime());
-
             tpList = temperaturesDatabase.daoAccess()
                     .fetchTemperaturesBetweenDate(fromm, too);
             temperaturesDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            System.out.println("Exception Exception Exception Database");
+            System.out.println("Exception Database TEMPERATURE");
         } finally {
             temperaturesDatabase.endTransaction();
         }
@@ -279,18 +260,13 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
         }
         return averageTemperature;
     }
+
     private Calendar getFirstDayOfWeek(){
         Calendar cTemp = Calendar.getInstance(Locale.FRANCE);
-
         cTemp.setTime(c.getTime());
-        System.out.println(c);
-        System.out.println(cTemp);
-
         while (cTemp.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-            System.out.println("szukamy poniedzialku (tesknimy za praca)"+cTemp);
             cTemp.add(Calendar.DATE, -1);
         }
-        System.out.println("ZNALEZIONO : "+cTemp);
         return cTemp;
     }
 
@@ -309,7 +285,6 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
     private Date getEndingOfDay(int dayOfWeek) {
         Calendar cTemp = getFirstDayOfWeek();
         cTemp.add(Calendar.DATE,dayOfWeek);
-        //c.add(Calendar.DATE,dayOfWeek);
         Date result = c.getTime();
         result.setDate(getWeekStartDate().getDate());
         result.setDate(dayOfWeek);
@@ -325,13 +300,11 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
         List<Temperatures> tpList = null;
         temperaturesDatabase.beginTransaction();
         try {
-//            System.out.println("AK: "+fromm);
-//            System.out.println("AK: "+too);
             tpList = temperaturesDatabase.daoAccess()
                     .fetchTemperaturesBetweenDate(fromm, too);
             temperaturesDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            System.out.println("Exception Exception Exception Database");
+            System.out.println("Exception Database TEMPERATURE");
         } finally {
             temperaturesDatabase.endTransaction();
         }
@@ -356,7 +329,7 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
             airPressuresList = airPressuresDatabase.daoAccess().fetchAirPressuresBetweenDate(fromm, too);
             airPressuresDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            System.out.println("Exception Exception Exception Database AIR PRESSURE");
+            System.out.println("Exception Database AIR PRESSURE");
         } finally {
             airPressuresDatabase.endTransaction();
         }
@@ -381,7 +354,7 @@ public class WeekInterval extends Fragment implements AdapterView.OnItemSelected
             humiditiesList = humiditiesDatabase.daoAccess().fetchHumiditiesBetweenDate(fromm,too);
             humiditiesDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            System.out.println("Exception Exception Exception Database HUMIDITY");
+            System.out.println("Exception Database HUMIDITY");
         } finally {
             humiditiesDatabase.endTransaction();
         }

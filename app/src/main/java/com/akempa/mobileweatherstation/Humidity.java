@@ -29,7 +29,6 @@ public class Humidity extends Fragment {
 
     private static final String DATABASE_NAME = "humidity_db";
     private HumiditiesDatabase humiditiesDatabase;
-    private List<Humidities> humiditiesList;
     private String value = "";
     private float v;
     private Button getHumidityButton;
@@ -102,72 +101,6 @@ public class Humidity extends Fragment {
                 Date date = new Date();
                 humidities.setHumidityTime(date);
                 humiditiesDatabase.daoAccess().insertHumidity(humidities);
-
-                // prepared for august
-//                for (int i = 0; i < 15 ; i++){
-//                    Date date1 = new Date();
-//                    date1.setYear(2018-1900);
-//                    date1.setMonth(7);
-//                    date1.setDate(15+i);
-//                    date1.setMinutes(25);
-//                    for (int j = 0; j < 18; j++){
-//                        Humidities preparedTemperature = new Humidities();
-//                        Random r = new Random();
-//                        float low = 55f;
-//                        float high = 75f;
-//                        float fakeValue = low + r.nextFloat() * (high-low);
-//                        String sFakeValue = Float.toString(fakeValue);
-//                        preparedTemperature.setHumidityValue(sFakeValue);
-//                        date1.setHours(5+j);
-//                        preparedTemperature.setHumidityTime(date1);
-//                        humiditiesDatabase.daoAccess().insertHumidity(preparedTemperature);
-//                    }
-//                }
-//                // prepared for september
-//                for (int i = 0; i < 29 ; i++){
-//                    Date date1 = new Date();
-//                    date1.setYear(2018-1900);
-//                    date1.setMonth(8);
-//                    date1.setDate(1+i);
-//                    date1.setMinutes(25);
-//                    for (int j = 0; j < 20; j++){
-//                        Humidities preparedTemperature = new Humidities();
-//                        Random r = new Random();
-//                        float low = 50f;
-//                        float high = 80f;
-//                        float fakeValue = low + r.nextFloat() * (high-low);
-//                        String sFakeValue = Float.toString(fakeValue);
-//                        preparedTemperature.setHumidityValue(sFakeValue);
-//                        date1.setHours(5+j);
-//                        preparedTemperature.setHumidityTime(date1);
-//                        humiditiesDatabase.daoAccess().insertHumidity(preparedTemperature);
-//                    }
-//                }
-//                // prepared for october
-//                for (int i = 0; i < 22 ; i++){
-//                    Date date1 = new Date();
-//                    date1.setYear(2018-1900);
-//                    date1.setMonth(9);
-//                    date1.setDate(1+i);
-//                    date1.setMinutes(25);
-//                    for (int j = 0; j < 20; j++){
-//                        Humidities preparedTemperature = new Humidities();
-//                        Random r = new Random();
-//                        float low = 50f;
-//                        float high = 70f;
-//                        float fakeValue = low + r.nextFloat() * (high-low);
-//                        String sFakeValue = Float.toString(fakeValue);
-//                        preparedTemperature.setHumidityValue(sFakeValue);
-//                        date1.setHours(5+j);
-//                        preparedTemperature.setHumidityTime(date1);
-//                        humiditiesDatabase.daoAccess().insertHumidity(preparedTemperature);
-//                    }
-//                }
-
-//                humiditiesList = humiditiesDatabase.daoAccess().getAllHumidities();
-//                for (int i = 0; i < humiditiesList.size(); i++) {
-//                    System.out.println(humiditiesList.get(i).getHumidityId() + " -- " + humiditiesList.get(i).getHumidityTime() + " -- " + humiditiesList.get(i).getHumidityValue());
-//                }
             }
         }).start();
     }

@@ -35,17 +35,14 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
 
     private Button btnDatePicker, btnTimePicker;
     private EditText txtDate, txtTime;
-    private int mYear, mMonth, mDay, mHour, mMinute;
-    private int endYear, endMonth, endDay; //, mHour, mMinute;
-    private static final String DATABASE_NAME = "movies_db";
+    private int mYear, mMonth, mDay;
+    private int endYear, endMonth, endDay;
+    private static final String DATABASE_NAME = "temperature_db";
     private static final String AIR_PRESSURE_DATABASE = "airpressure_db";
     private static final String HUMIDITY_DATABASE = "humidity_db";
     private static final String DATE_FORMAT = "MM-yyyy";
 
     private Button btnUpdate;
-    private Button previousDay;
-    private Button nextDay;
-    private TextView actualDate;
     private String measurementType;
     private DateFormat dateFormat;
     private Calendar c;
@@ -56,8 +53,6 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
     private BarChart chart;
     private BarData data;
     String[] choose = { "Temperatura", "Ciśnienie", "Wilgotność", "Wszystkie"};
-
-    private List<Temperatures> temperaturesList;
 
     private TemperaturesDatabase temperaturesDatabase;
     private AirPressuresDatabase airPressuresDatabase;
@@ -91,8 +86,6 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(aa);
 
-     //   actualDate = view.findViewById(R.id.actualDate);
-
         dateFormat = new SimpleDateFormat(DATE_FORMAT);
         c = Calendar.getInstance();
         c.setTime(new Date());
@@ -103,19 +96,6 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
         dateEnding = c.getTime();
         dateEnding.setMinutes(59);
         dateEnding.setSeconds(59);
-
-//        nextDay = view.findViewById(R.id.btnNext);
-//        nextDay.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                c.add(Calendar.DATE, 30);
-//                dateStarting.setDate(c.getTime().getDate());
-//                dateEnding.setDate(c.getTime().getDate());
-//                actualDateString = dateFormat.format(c.getTime());
-//                actualDate.setText(actualDateString);
-//                setGraphs(measurementType);
-//            }
-//        });
 
         btnUpdate = view.findViewById(R.id.btnUpdate);
         btnUpdate.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +124,7 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
                         chart.clear();
                     }
                 });
-                //int period = ;
+
                 Date dateStarting = c.getTime();
                 dateStarting.setYear(mYear);
                 dateStarting.setMonth(mMonth);
@@ -157,8 +137,6 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
                 System.out.println(""+period);
 
                 for (int i = 1 ; i < period+1 ; i++){
-//                    dateStarting.setHours(i);
-//                    dateEnding.setHours(i);
 
                     float average = 0;
                     if (type.equals("Temperatura")) {
@@ -173,13 +151,7 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
 
                     entries.add(new BarEntry(i, average));
                 }
-//                ArrayList<String> labels = new ArrayList<String>();
-//                labels.add("January");
-//                labels.add("February");
-//                labels.add("March");
-//                labels.add("April");
-//                labels.add("May");
-//                labels.add("June");
+
                 dataSet = new BarDataSet(entries, "Pomiary");
                 data = new BarData(dataSet);
                 dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
@@ -187,11 +159,6 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
                 Description description = new Description();
                 description.setText(" ");
                 chart.setDescription(description);
-
-                // XAxis xAxis = chart.getXAxis();
-                //xAxis.setLabelCount(entries.size());
-                //xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
-                //chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -225,24 +192,21 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
             Date dataStart = c.getTime();
             dataStart.setDate(mDay+i);
             dataStart.setMonth(mMonth);
-//            dataStart.setYear(mYear);
             dataStart.setHours(1);
             dataStart.setMinutes(0);
             dataStart.setSeconds(0);
             Date dataEnd = c.getTime();
-//            dataEnd.setYear(endYear);
             dataEnd.setMonth(mMonth);
             dataEnd.setDate(mDay+i);
             dataEnd.setHours(23);
             dataEnd.setMinutes(59);
             dataEnd.setSeconds(59);
-//            System.out.println("SK: "+dataStart);
-//            System.out.println("SK: "+dataEnd);
+
             tpList = temperaturesDatabase.daoAccess()
                     .fetchTemperaturesBetweenDate(dataStart, dataEnd);
             temperaturesDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            System.out.println("Exception Exception Exception Database");
+            System.out.println("Exception Database TEMPERATURE");
         } finally {
             temperaturesDatabase.endTransaction();
         }
@@ -263,14 +227,13 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
         float averageTemperature = 0;
         float sumOfAllValues = 0;
         List<Temperatures> tpList = null;
-//        System.out.println("AK: "+fromm);
         temperaturesDatabase.beginTransaction();
         try {
             tpList = temperaturesDatabase.daoAccess()
                     .fetchTemperaturesBetweenDate(fromm, too);
             temperaturesDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            System.out.println("Exception Exception Exception Database");
+            System.out.println("Exception Database TEMPERATURE");
         } finally {
             temperaturesDatabase.endTransaction();
         }
@@ -307,7 +270,7 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
             airPressuresList = airPressuresDatabase.daoAccess().fetchAirPressuresBetweenDate(dataStart, dataEnd);
             airPressuresDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            System.out.println("Exception Exception Exception Database AIR PRESSURE");
+            System.out.println("Exception Database AIR PRESSURE");
         } finally {
             airPressuresDatabase.endTransaction();
         }
@@ -344,7 +307,7 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
             humiditiesList = humiditiesDatabase.daoAccess().fetchHumiditiesBetweenDate(dataStart,dataEnd);
             humiditiesDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            System.out.println("Exception Exception Exception Database HUMIDITY");
+            System.out.println("Exception Database HUMIDITY");
         } finally {
             humiditiesDatabase.endTransaction();
         }
@@ -360,8 +323,6 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
         return averageHumidity;
     }
 
-
-
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
         Toast.makeText(getContext(),choose[position] , Toast.LENGTH_LONG).show();
         measurementType = choose[position].toString();
@@ -376,10 +337,7 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        //DatePickerDialog datePickerDialog = null;
         if (v == btnDatePicker) {
-
-            // Get start Date
             final Calendar c = Calendar.getInstance();
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
@@ -392,7 +350,6 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
                         @Override
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
-
                             txtDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
                             mYear = view.getYear();
                             mMonth = view.getMonth()+1;
@@ -402,11 +359,10 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
                     }, mYear, mMonth, mDay);
 
             datePickerDialog.show();
-           // System.out.println("Y: " + mYear + " M: " + mMonth + " D: " + mDay);
+
         }
         if (v == btnTimePicker) {
 
-            // Get end Date
             final Calendar c = Calendar.getInstance();
             endYear = c.get(Calendar.YEAR);
             endMonth = c.get(Calendar.MONTH);
@@ -419,9 +375,7 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
                         @Override
                         public void onDateSet(DatePicker view, int year,
                                               int monthOfYear, int dayOfMonth) {
-
                             txtTime.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                            //endDay = datePickerDialog.getDatePicker().getDayOfMonth();
                             endDay = view.getDayOfMonth();
                             endMonth = view.getMonth()+1;
                             endYear = view.getYear();
@@ -430,8 +384,6 @@ public class SelectYourInterval extends Fragment implements View.OnClickListener
                     }, endYear, endMonth, endDay);
 
             datePickerDialog.show();
-
-            //System.out.println("Y: " + endYear + " M: " + endMonth + " D: " + endDay);
         }
     }
 }

@@ -16,18 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
 import de.nitri.gauge.Gauge;
 
 public class AirPressure  extends Fragment {
 
     private static final String DATABASE_NAME = "airpressure_db";
     private AirPressuresDatabase airPressuresDatabase;
-    private List<AirPressures> airPressuresList;
     private String value = "";
     private float v;
     private Button getAirPressureButton;
@@ -63,7 +58,6 @@ public class AirPressure  extends Fragment {
         View view = inflater.inflate(R.layout.air_pressure_fragment,container,false);
         airPressuresDatabase = Room.databaseBuilder(getContext(), AirPressuresDatabase.class, DATABASE_NAME).fallbackToDestructiveMigration().build();
 
-
         gauge1 = view.findViewById(R.id.gauge);
         textTab1 = view.findViewById(R.id.textTab1);
         getAirPressureButton = view.findViewById(R.id.btn_get_air_press);
@@ -95,83 +89,12 @@ public class AirPressure  extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-//                AirPressures airPressuresToDel = new AirPressures();
-//                airPressuresToDel.setAirPressureId(34);
-//                airPressuresDatabase.daoAccess().deleteAirPressure(airPressuresToDel);
-
                 AirPressures airPressures = new AirPressures();
                 airPressures.setAirPressureValue(value);
                 Date date = new Date();
                 airPressures.setAirPressureTime(date);
                 airPressuresDatabase.daoAccess().insertAirPressure(airPressures);
-
-                // prepared for august
-//                for (int i = 0; i < 15 ; i++){
-//                    Date date1 = new Date();
-//                    date1.setYear(2018-1900);
-//                    date1.setMonth(7);
-//                    date1.setDate(15+i);
-//                    date1.setMinutes(20);
-//                    for (int j = 0; j < 18; j++){
-//                        AirPressures preparedTemperature = new AirPressures();
-//                        Random r = new Random();
-//                        float low = 980f;
-//                        float high = 1005f;
-//                        float fakeValue = low + r.nextFloat() * (high-low);
-//                        String sFakeValue = Float.toString(fakeValue);
-//                        preparedTemperature.setAirPressureValue(sFakeValue);
-//                        date1.setHours(5+j);
-//                        preparedTemperature.setAirPressureTime(date1);
-//                        airPressuresDatabase.daoAccess().insertAirPressure(preparedTemperature);
-//                    }
-//                }
-//                // prepared for september
-//                for (int i = 0; i < 29 ; i++){
-//                    Date date1 = new Date();
-//                    date1.setYear(2018-1900);
-//                    date1.setMonth(8);
-//                    date1.setDate(1+i);
-//                    date1.setMinutes(20);
-//                    for (int j = 0; j < 20; j++){
-//                        AirPressures preparedTemperature = new AirPressures();
-//                        Random r = new Random();
-//                        float low = 980f;
-//                        float high = 1005f;
-//                        float fakeValue = low + r.nextFloat() * (high-low);
-//                        String sFakeValue = Float.toString(fakeValue);
-//                        preparedTemperature.setAirPressureValue(sFakeValue);
-//                        date1.setHours(5+j);
-//                        preparedTemperature.setAirPressureTime(date1);
-//                        airPressuresDatabase.daoAccess().insertAirPressure(preparedTemperature);
-//                    }
-//                }
-//                // prepared for october
-//                for (int i = 0; i < 22 ; i++){
-//                    Date date1 = new Date();
-//                    date1.setYear(2018-1900);
-//                    date1.setMonth(9);
-//                    date1.setDate(1+i);
-//                    date1.setMinutes(20);
-//                    for (int j = 0; j < 20; j++){
-//                        AirPressures preparedTemperature = new AirPressures();
-//                        Random r = new Random();
-//                        float low = 980f;
-//                        float high = 1005f;
-//                        float fakeValue = low + r.nextFloat() * (high-low);
-//                        String sFakeValue = Float.toString(fakeValue);
-//                        preparedTemperature.setAirPressureValue(sFakeValue);
-//                        date1.setHours(5+j);
-//                        preparedTemperature.setAirPressureTime(date1);
-//                        airPressuresDatabase.daoAccess().insertAirPressure(preparedTemperature);
-//                    }
-//                }
-
-               // airPressuresList = airPressuresDatabase.daoAccess().getAllAirPressures();
-//                for (int i = 0; i < airPressuresList.size(); i++){
-//                    System.out.println(airPressuresList.get(i).getAirPressureId() + " -- " + airPressuresList.get(i).getAirPressureTime() + " -- " + airPressuresList.get(i).getAirPressureValue());
-//                    }
             }
         }).start();
     }
-
 }

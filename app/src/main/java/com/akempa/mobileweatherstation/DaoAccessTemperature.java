@@ -10,18 +10,16 @@ import java.util.Date;
 import java.util.List;
 
 @Dao
-public interface DaoAccess {
+public interface DaoAccessTemperature {
 
     @Insert
-    void insertOnlySingleMovie (Temperatures temperatures);
+    void insertOnlySingleTemperature(Temperatures temperatures);
 
     @Query("SELECT * FROM Temperatures")
     List<Temperatures> getAllTemperatures();
 
     @Query("SELECT * FROM Temperatures WHERE temperatureTime BETWEEN :from AND :to")
     List<Temperatures> fetchTemperaturesBetweenDate(Date from, Date to);
-
-
 
     @Update
     void updateTemperature (Temperatures temperatures);

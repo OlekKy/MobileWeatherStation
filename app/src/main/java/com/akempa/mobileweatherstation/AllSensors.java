@@ -50,10 +50,8 @@ public class AllSensors extends Fragment {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int i) {
-
         }
     };
-
 
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
@@ -78,7 +76,6 @@ public class AllSensors extends Fragment {
                 airPressureSensor = sensorManagerTemperature.getDefaultSensor(Sensor.TYPE_PRESSURE);
                 humiditySensor = sensorManagerTemperature.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY);
 
-
                 switch (motionEvent.getAction()){
 
                     case MotionEvent.ACTION_DOWN:
@@ -98,7 +95,6 @@ public class AllSensors extends Fragment {
                 return false;
             }
         });
-
         return view;
     }
 }

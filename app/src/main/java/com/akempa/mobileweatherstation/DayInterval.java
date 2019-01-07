@@ -33,7 +33,7 @@ import java.util.List;
 
 public class DayInterval extends Fragment implements AdapterView.OnItemSelectedListener {
 
-    private static final String DATABASE_NAME = "movies_db";
+    private static final String DATABASE_NAME = "temperature_db";
     private static final String AIR_PRESSURE_DATABASE = "airpressure_db";
     private static final String HUMIDITY_DATABASE = "humidity_db";
     private static final String DATE_FORMAT = "dd-MM-yyyy";
@@ -53,14 +53,11 @@ public class DayInterval extends Fragment implements AdapterView.OnItemSelectedL
     private BarData data;
     String[] choose = { "Temperatura", "Ciśnienie", "Wilgotność", "Wszystkie"};
 
-    private List<Temperatures> temperaturesList;
-
     private TemperaturesDatabase temperaturesDatabase;
     private AirPressuresDatabase airPressuresDatabase;
     private HumiditiesDatabase humiditiesDatabase;
 
     ArrayList<BarEntry> entries = new ArrayList<>();
-    ArrayList<String> labels = new ArrayList<>();
 
     @Nullable
     @Override
@@ -166,13 +163,7 @@ public class DayInterval extends Fragment implements AdapterView.OnItemSelectedL
 
                     entries.add(new BarEntry(i, average));
                 }
-//                ArrayList<String> labels = new ArrayList<String>();
-//                labels.add("January");
-//                labels.add("February");
-//                labels.add("March");
-//                labels.add("April");
-//                labels.add("May");
-//                labels.add("June");
+
                 dataSet = new BarDataSet(entries, "Pomiary");
                 data = new BarData(dataSet);
                 dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
@@ -180,11 +171,6 @@ public class DayInterval extends Fragment implements AdapterView.OnItemSelectedL
                 Description description = new Description();
                 description.setText(" ");
                 chart.setDescription(description);
-
-               // XAxis xAxis = chart.getXAxis();
-                //xAxis.setLabelCount(entries.size());
-                //xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
-                //chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -223,13 +209,12 @@ public class DayInterval extends Fragment implements AdapterView.OnItemSelectedL
             dataEnd.setHours(i);
             dataEnd.setMinutes(59);
             dataEnd.setSeconds(59);
-//            System.out.println("SK: "+dataStart);
-//            System.out.println("SK: "+dataEnd);
+
             tpList = temperaturesDatabase.daoAccess()
                     .fetchTemperaturesBetweenDate(dataStart, dataEnd);
             temperaturesDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            System.out.println("Exception Exception Exception Database");
+            System.out.println("Exception Database TEMPERATURE");
         } finally {
             temperaturesDatabase.endTransaction();
         }
@@ -250,14 +235,14 @@ public class DayInterval extends Fragment implements AdapterView.OnItemSelectedL
         float averageTemperature = 0;
         float sumOfAllValues = 0;
         List<Temperatures> tpList = null;
-//        System.out.println("AK: "+fromm);
+
         temperaturesDatabase.beginTransaction();
         try {
             tpList = temperaturesDatabase.daoAccess()
                     .fetchTemperaturesBetweenDate(fromm, too);
             temperaturesDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            System.out.println("Exception Exception Exception Database");
+            System.out.println("Exception Database TEMPERATURE");
         } finally {
             temperaturesDatabase.endTransaction();
         }
@@ -290,7 +275,7 @@ public class DayInterval extends Fragment implements AdapterView.OnItemSelectedL
             airPressuresList = airPressuresDatabase.daoAccess().fetchAirPressuresBetweenDate(dataStart, dataEnd);
             airPressuresDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            System.out.println("Exception Exception Exception Database AIR PRESSURE");
+            System.out.println("Exception Database AIR PRESSURE");
         } finally {
             airPressuresDatabase.endTransaction();
         }
@@ -323,7 +308,7 @@ public class DayInterval extends Fragment implements AdapterView.OnItemSelectedL
             humiditiesList = humiditiesDatabase.daoAccess().fetchHumiditiesBetweenDate(dataStart,dataEnd);
             humiditiesDatabase.setTransactionSuccessful();
         } catch (Exception e) {
-            System.out.println("Exception Exception Exception Database HUMIDITY");
+            System.out.println("Exception Database HUMIDITY");
         } finally {
             humiditiesDatabase.endTransaction();
         }

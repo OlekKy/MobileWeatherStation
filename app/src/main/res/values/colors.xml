@@ -8,4 +8,5 @@
     <color name="innerColor">#FF0000</color>
     <color name="middleColor">#00ecff</color>
     <color name="outerColor">#001eff</color>
+    <color name="lightBlue">#B0DFE5</color>
 </resources>

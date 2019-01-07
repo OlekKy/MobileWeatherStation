@@ -7,5 +7,5 @@ import android.arch.persistence.room.TypeConverters;
 @Database(entities = {Temperatures.class}, version = 4, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class TemperaturesDatabase extends RoomDatabase {
-    public abstract DaoAccess daoAccess();
+    public abstract DaoAccessTemperature daoAccess();
 }

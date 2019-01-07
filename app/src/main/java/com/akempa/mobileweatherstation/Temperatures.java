@@ -26,7 +26,6 @@ public class Temperatures {
         this.temperatureId = temperatureId;
         this.temperatureValue = temperatureValue;
         this.temperatureDate = temperatureDate;
-        this.temperatureTime = temperatureTime;
     }
 
     @NonNull

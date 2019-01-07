@@ -17,11 +17,11 @@ public class SensorsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensors);
 
-        final TextView textView1 = (TextView) findViewById(R.id.textView);
-        final TextView textView2 = (TextView) findViewById(R.id.textView2);
-        final TextView textView3 = (TextView) findViewById(R.id.textView3);
+        final TextView textView1 = findViewById(R.id.textView);
+        final TextView textView2 = findViewById(R.id.textView2);
+        final TextView textView3 = findViewById(R.id.textView3);
 
-        Button button5 = (Button) findViewById(R.id.button5);
+        Button button5 = findViewById(R.id.button5);
         button5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -29,7 +29,7 @@ public class SensorsActivity extends AppCompatActivity {
             }
         });
 
-        Button button6 = (Button) findViewById(R.id.button6);
+        Button button6 = findViewById(R.id.button6);
         button6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,7 +49,7 @@ public class SensorsActivity extends AppCompatActivity {
             }
         });
 
-        Button button7 = (Button) findViewById(R.id.button7);
+        Button button7 = findViewById(R.id.button7);
         button7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,7 +69,7 @@ public class SensorsActivity extends AppCompatActivity {
             }
         });
 
-        Button button8 = (Button) findViewById(R.id.button8);
+        Button button8 = findViewById(R.id.button8);
         button8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,9 +86,7 @@ public class SensorsActivity extends AppCompatActivity {
                     }
                 };
                 sensorManager.registerListener(sensorEventListener, humiditySensor, SensorManager.SENSOR_DELAY_UI);
-
             }
         });
-
     }
 }

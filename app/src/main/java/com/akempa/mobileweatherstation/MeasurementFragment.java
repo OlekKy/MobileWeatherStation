@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MeasurementFragment extends Fragment {
-    private static final String TAG = "MeasurementFragment";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,10 +26,9 @@ public class MeasurementFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.measurement_fixture_tabs,container,false);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        ViewPager viewPager = view.findViewById(R.id.viewpager);
         setupViewPager(viewPager);
-        // Set tabs inside toolbar
-        TabLayout tabs = (TabLayout) view.findViewById(R.id.result_tabs);
+        TabLayout tabs = view.findViewById(R.id.result_tabs);
         tabs.setupWithViewPager(viewPager);
 
         return view;
